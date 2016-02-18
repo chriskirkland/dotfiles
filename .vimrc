@@ -118,9 +118,6 @@ nmap <c-q> :q<CR>
 vmap <c-q> <Esc><c-q>
 imap <c-q> <Esc><c-q>
 " force close file
-" nmap <c-x> :q!<CR>
-" vmap <c-x> <Esc><c-x>
-" imap <c-x> <Esc><c-x>
 nmap <c-q><c-q> :q!<CR>
 vmap <c-q><c-q> <Esc><c-q><c-q>
 imap <c-q><c-q> <Esc><c-q><c-q>
@@ -129,3 +126,16 @@ set timeoutlen=300 " wait 300 ms for follow-up keys before executing
 " visual code block indenting
 vnoremap < <gv
 vnoremap > >gv
+
+let g:quickfix_is_open = 1
+" toggle QuickFix window
+function! QuickFixToggle()
+	if g:quickfix_is_open
+		cclose
+		let g:quickfix_is_open = 0
+	else
+		copen
+		let g:quickfix_is_open = 1
+	endif
+endfunction
+nnoremap <c-d> :call QuickFixToggle()<CR>
