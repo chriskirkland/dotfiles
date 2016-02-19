@@ -71,6 +71,11 @@ inoremap <up>    <ESC>:echom 'Stop being dumb...'<CR>
 inoremap <down>  <ESC>:echom 'Stop being dumb...'<CR>
 inoremap <right> <ESC>:echom 'Stop being dumb...'<CR>
 inoremap <left>  <ESC>:echom 'Stop being dumb...'<CR>
+" vim split navigation
+map <c-h> <c-w>h
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
 
 " map sort function to key
 vnoremap <Leader>s :sort<CR>
@@ -86,7 +91,7 @@ set t_Co=256
 color wombat256mod
 
 " NerdTree
-map <C-n> :NERDTreeToggle<CR>
+map <Leader>n :NERDTreeToggle<CR>
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.js,*.java,*.pyc,*.h,*.log,*.properties,*.mp3,*.jar,*.pyo,*.cpp
 " if executable('ag')
@@ -102,9 +107,15 @@ let g:syntastic_check_on_open = 1 " check syntax on file open
 autocmd BufWritePost *.py call Flake8() " PEP8 check every time you save a python file
 
 " python specific
-set colorcolumn=80
-highlight ColorColumn ctermbg=red
-call matchadd('ColorColumn', '\%81v,', 100)
+" set colorcolumn=80
+" highlight ColorColumn ctermbg=235
+" math ColorColumn /\%81v.\+/
+fu! SetPythonColumnWidth()
+	highlight OverLength ctermbg=lightgrey ctermfg=white guibg=#592929
+	match OverLength /\%81v.\+/
+endfunction
+au BufWinEnter *.py  call SetPythonColumnWidth()
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """	General
