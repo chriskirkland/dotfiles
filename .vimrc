@@ -110,11 +110,16 @@ autocmd BufWritePost *.py call Flake8() " PEP8 check every time you save a pytho
 " set colorcolumn=80
 " highlight ColorColumn ctermbg=235
 " math ColorColumn /\%81v.\+/
-fu! SetPythonColumnWidth()
+fu! PythonSettings()
+	" 80 column highlighting
 	highlight OverLength ctermbg=lightgrey ctermfg=white guibg=#592929
 	match OverLength /\%81v.\+/
+
+	" code folding
+	set foldmethod=indent
+	set foldnestmax=2
 endfunction
-au BufWinEnter *.py  call SetPythonColumnWidth()
+au BufWinEnter *.py  call PythonSettings()
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -138,6 +143,10 @@ set timeoutlen=300 " wait 300 ms for follow-up keys before executing
 vnoremap < <gv
 vnoremap > >gv
 
+" code folding
+nnoremap <space> za
+vnoremap <space> zf
+
 let g:quickfix_is_open = 1
 " toggle QuickFix window
 function! QuickFixToggle()
@@ -150,3 +159,6 @@ function! QuickFixToggle()
 	endif
 endfunction
 nnoremap <c-d> :call QuickFixToggle()<CR>
+
+" toggle paste mode
+set pastetoggle=<F12> " doesn't work with <c-\>???
