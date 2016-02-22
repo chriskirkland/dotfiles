@@ -1,3 +1,20 @@
+""""" Install instruction
+"
+""" clone repository
+" git https://github.com/bifurcationman/dotfiles.git
+"
+""" create symlinks
+".bin/make-symlinks.sh
+"
+""" install vundle and plugins
+" git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+" vim +PluginInstall +qall
+"
+""" allow ctrl+s/q forwarding
+" echo 'stty -ixon' >> .bashrc
+" source .bashrc
+
+
 """"" Vundle
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -38,6 +55,7 @@ set encoding=utf-8 " Necessary to show Unicode glyphs
 set autoindent
 set backspace=indent,eol,start
 set clipboard=unnamed
+set expandtab
 set hlsearch
 set incsearch
 set nowrap
