@@ -40,13 +40,19 @@ Plugin 'fugitive.vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
+Plugin 'fatih/vim-go'
 
 " Other Plugins
 Plugin 'L9'
 Plugin 'ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'nathanaelkane/vim-indent-guides'
 " Plugin 'klen/python-mode'
 " Plugin 'sgeb/vim-diff-fold'
+
+" non-vundle Plugins
+" https://valloric.github.io/YouCompleteMe/#intro  # autocomplete
+" Plugin 'Valloric/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -66,7 +72,7 @@ set autoindent
 set backspace=indent,eol,start
 set clipboard=unnamed
 set hlsearch
-set incsearch
+" set incsearch
 set nowrap
 set nu
 set rnu
@@ -143,6 +149,9 @@ endfunction
 au BufWinEnter *.py  call PythonSettings()
 autocmd FileType python :iabbrev <buffer> iff if:<left>
 
+" Golang specific
+let g:go_fmt_command = "goimports"
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """	General
@@ -150,7 +159,7 @@ autocmd FileType python :iabbrev <buffer> iff if:<left>
 " save file
 nnoremap <c-s> :w<CR>
 vnoremap <c-s> <Esc><c-s>gv
-inoremap <c-s> <Esc><c-s>
+imap <c-s> <Esc><c-s>
 " close file
 nnoremap <c-q> :q<CR>
 vnoremap <c-q> <Esc><c-q>
@@ -159,7 +168,7 @@ inoremap <c-q> <Esc><c-q>
 nnoremap <c-q><c-q> :q!<CR>
 vnoremap <c-q><c-q> <Esc><c-q><c-q>
 inoremap <c-q><c-q> <Esc><c-q><c-q>
-set timeoutlen=300 " wait 300 ms for follow-up keys before executing
+set timeoutlen=250 " wait 300 ms for follow-up keys before executing
 
 " visual code block indenting
 vnoremap < <gv
@@ -198,3 +207,31 @@ nnoremap <c-d> :call QuickFixToggle()<CR>
 set pastetoggle=<F12> " doesn't work with <c-\>???
 
 let g:flake8_show_in_file=0
+
+" vim-indent-guides specifics
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'go']
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=grey ctermbg=8  " dark grey
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=grey ctermbg=8  " dark grey
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+
+" Golang specific
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>r <Plug>(go-run)
+au FileType go nmap <Leader>b <Plug>(go-build)
+au FileType go nmap <Leader>t <Plug>(go-test)
+au FileType go nmap gd <Plug>(go-def-tab)
+au FileType go inoremap <space><space> <c-x><c-o>
+
+" cursorline (only in Normal mode)
+set cursorline
+highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+autocmd InsertEnter * set nocursorline
+autocmd InsertLeave * set cursorline
+
+" YAML
+autocmd Filetype yaml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
