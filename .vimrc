@@ -232,6 +232,5 @@ highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guif
 autocmd InsertEnter * set nocursorline
 autocmd InsertLeave * set cursorline
 
-" YAML
-autocmd Filetype yaml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype yml setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" Alternate tab lengths
+autocmd Filetype yaml,yml,sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
