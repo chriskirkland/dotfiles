@@ -3,17 +3,16 @@
 # config
 PWD=`pwd`
 HOME=$(readlink -f ~)
+FILES=(.vimrc .vim .pylintrc)
 
-# make backups
-if [ -e $HOME/.vimrc ];
-then
-	mv $HOME/.vimrc $HOME/.vimrc.backup
-fi
-if [ -e $HOME/.vim ];
-then
-	mv $HOME/.vim $HOME/.vim.backup
-fi
+for FILE in "${FILES[@]}"
+do
+  # backup file
+  if [ -e $HOME/$FILE ];
+  then
+    mv $HOME/$FILE{,.backup}
+  fi
 
-# make links
-ln -s $PWD/.vimrc $HOME/.vimrc
-ln -s $PWD/.vim $HOME/.vim
+  # link new source
+  ln -s $PWD/$FILE $HOME/$FILE
+done
