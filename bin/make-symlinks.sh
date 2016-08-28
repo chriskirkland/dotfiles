@@ -3,6 +3,20 @@
 # on OSX requires installation of `coreutils`:
 #   brew install coreutils
 
+# Tries to backup $SRC file to $TARGET. Returns whether backup was successful.
+try_backup() {
+  SRC=$1
+  TARGET=$2
+
+  if [ -e $TARGET ] && diff $SRC $TARGET;
+  then
+    return false
+  else
+    mv $SRC $TARGET
+    return true
+  fi
+}
+
 # config
 PWD=`pwd`
 if [ `uname` == "Darwin" ]
@@ -16,10 +30,13 @@ FILES=(.vimrc .vim .pylintrc)
 for FILE in "${FILES[@]}"
 do
   # backup file
-  if [ -e $HOME/$FILE ]
-  then
-    mv $HOME/$FILE{,.backup}
-  fi
+  TARGET=$HOME/$FILE
+  LOOP=1
+  while ! try_backup $HOME/$FILE $TARGET;
+  do
+    TARGET="$HOME/$FILE~$LOOP"
+    ((LOOP++))
+  done
 
   # link new source
   ln -s $PWD/$FILE $HOME/$FILE
