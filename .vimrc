@@ -1,5 +1,4 @@
-""""" Install instruction
-"
+""""" Install instruction "
 """ clone repository
 " git https://github.com/bifurcationman/dotfiles.git
 "
@@ -64,7 +63,7 @@ set laststatus=2   " Always show the statusline
 set encoding=utf-8 " Necessary to show Unicode glyphs
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""	General
+"""  General
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=","
 
@@ -77,13 +76,6 @@ set nowrap
 set nu
 set rnu
 syntax on
-
-" Python hates TABs
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set shiftround
-set expandtab
 
 " disable arrow keys
 noremap <up>    :echom 'Stop being dumb...'<CR>
@@ -137,14 +129,14 @@ autocmd BufWritePost *.py call Flake8() " PEP8 check every time you save a pytho
 " highlight ColorColumn ctermbg=235
 " math ColorColumn /\%81v.\+/
 fu! PythonSettings()
-	" 80 column highlighting
-	highlight OverLength ctermbg=lightgrey ctermfg=white guibg=#592929
-	match OverLength /\%81v.\+/
+  " 80 column highlighting
+  highlight OverLength ctermbg=lightgrey ctermfg=white guibg=#592929
+  match OverLength /\%81v.\+/
 
-	" code folding
-    let g:pymode_folding=0
-	" set foldmethod=indent
-	" set foldnestmax=2
+  " code folding
+  let g:pymode_folding=0
+  " set foldmethod=indent
+  " set foldnestmax=2
 endfunction
 au BufWinEnter *.py  call PythonSettings()
 autocmd FileType python :iabbrev <buffer> iff if:<left>
@@ -154,7 +146,7 @@ let g:go_fmt_command = "goimports"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""	General
+"""  General
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " save file
 nnoremap <c-s> :w<CR>
@@ -174,16 +166,19 @@ set timeoutlen=250 " wait 300 ms for follow-up keys before executing
 vnoremap < <gv
 vnoremap > >gv
 
+" highlight word under cursor
+autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
+
 " code folding
 let g:codefold_all_on=1
 function! PythonFoldToggle()
-    if g:codefold_all_on
-        normal zE
-        let g:codefold_all=1
-    else
-        normal zM
-        let g:codefold_all=0
-    endif
+  if g:codefold_all_on
+    normal zE
+    let g:codefold_all=1
+  else
+    normal zM
+    let g:codefold_all=0
+  endif
 endfunction
 nnoremap <space> za
 vnoremap <space> zf
@@ -193,13 +188,13 @@ vnoremap F :call PythonFoldToggle()<CR>
 let g:quickfix_is_open = 1
 " toggle QuickFix window
 function! QuickFixToggle()
-	if g:quickfix_is_open
-		cclose
-		let g:quickfix_is_open = 0
-	else
-		copen
-		let g:quickfix_is_open = 1
-	endif
+  if g:quickfix_is_open
+    cclose
+    let g:quickfix_is_open = 0
+  else
+    copen
+    let g:quickfix_is_open = 1
+  endif
 endfunction
 nnoremap <c-d> :call QuickFixToggle()<CR>
 
@@ -227,10 +222,13 @@ au FileType go nmap gd <Plug>(go-def-tab)
 au FileType go inoremap <space><space> <c-x><c-o>
 
 " cursorline (only in Normal mode)
-set cursorline
+" set cursorline
 highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 autocmd InsertEnter * set nocursorline
 autocmd InsertLeave * set cursorline
 
-" Alternate tab lengths
-autocmd Filetype yaml,yml,sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" FileType specific settings
+" autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 | endif  " no extension
+" autocmd FileType yaml,yml,sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType * setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType py,go setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4 shiftround
