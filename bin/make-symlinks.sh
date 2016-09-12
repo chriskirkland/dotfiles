@@ -2,6 +2,12 @@
 # Works for installing dotfiles on Ubuntu, CentOS, Fedora, and OSX. Instllation
 # on OSX requires installation of `coreutils`:
 #   brew install coreutils
+if [ `uname` == "Darwin" ]
+then
+  READLINK=greadlink
+else
+  READLINK=readlink
+fi
 
 # Tries to backup $SRC file to $TARGET. Returns whether backup was successful.
 try_backup() {
@@ -19,14 +25,10 @@ try_backup() {
 
 # config
 PWD=`pwd`
-if [ `uname` == "Darwin" ]
-then
-  HOME=$(greadlink -f ~)  # OSX
-else
-  HOME=$(readlink -f ~)  # Linux
-fi
+HOME=$($READLINK -f ~)
 FILES=(.vimrc .vim .pylintrc)
 
+# install files
 for FILE in "${FILES[@]}"
 do
   # backup file
