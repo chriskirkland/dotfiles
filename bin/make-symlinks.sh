@@ -16,10 +16,10 @@ try_backup() {
 
   if [ -e $TARGET ] && diff $SRC $TARGET;
   then
-    return false
+    return 1
   else
     mv $SRC $TARGET
-    return true
+    return 0
   fi
 }
 
