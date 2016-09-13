@@ -77,44 +77,44 @@ hname="mymbp"
 # set up command prompt
 function __prompt_command()
 {
-    # capture the exit status of the last command
-    EXIT="$?"
-    PS1=""
+  # capture the exit status of the last command
+  EXIT="$?"
+  PS1=""
 
-    if [ $EXIT -eq 0 ]; then PS1+="\[$Green\][\!]\[$Color_Off\] "; else PS1+="\[$Red\][\!]\[$Color_Off\] "; fi
+  if [ $EXIT -eq 0 ]; then PS1+="\[$Green\][\!]\[$Color_Off\] "; else PS1+="\[$Red\][\!]\[$Color_Off\] "; fi
 
-    # if logged in via ssh shows the ip of the client
-    if [ -n "$SSH_CLIENT" ]; then PS1+="\[$Yellow\]("${$SSH_CLIENT%% *}")\[$Color_Off\]"; fi
+  # if logged in via ssh shows the ip of the client
+  if [ -n "$SSH_CLIENT" ]; then PS1+="\[$Yellow\]("${$SSH_CLIENT%% *}")\[$Color_Off\]"; fi
 
-    # debian chroot stuff (take it or leave it)
-    PS1+="${debian_chroot:+($debian_chroot)}"
+  # debian chroot stuff (take it or leave it)
+  PS1+="${debian_chroot:+($debian_chroot)}"
 
-    # basic information (user@host:path)
-    #PS1+="\[$BRed\]\u\[$Color_Off\]@\[$BRed\]\h\[$Color_Off\]:\[$BPurple\]\w\[$Color_Off\] "
-    PS1+="\[$BRed\]$uname\[$Color_Off\]@\[$BRed\]$hname\[$Color_Off\]:\[$BPurple\]\w\[$Color_Off\] "
+  # basic information (user@host:path)
+  #PS1+="\[$BRed\]\u\[$Color_Off\]@\[$BRed\]\h\[$Color_Off\]:\[$BPurple\]\w\[$Color_Off\] "
+  PS1+="\[$BRed\]$uname\[$Color_Off\]@\[$BRed\]$hname\[$Color_Off\]:\[$BPurple\]\w\[$Color_Off\] "
 
-    # check if inside git repo
-    local git_status="`git status -unormal 2>&1`"
-    if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
-        # parse the porcelain output of git status
-        if [[ "$git_status" =~ nothing\ to\ commit ]]; then
-            local Color_On=$Green
-        elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
-            local Color_On=$Purple
-        else
-            local Color_On=$Red
-        fi
-        if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
-            branch=${BASH_REMATCH[1]}
-        else
-            # Detached HEAD. (branch=HEAD is a faster alternative.)
-            branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
-        fi
-        # add the result to prompt
-        PS1+="\[$Color_On\][$branch]\[$Color_Off\] "
+  # check if inside git repo
+  local git_status="`git status -unormal 2>&1`"
+  if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
+    # parse the porcelain output of git status
+    if [[ "$git_status" =~ nothing\ to\ commit ]]; then
+      local Color_On=$Green
+    elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
+      local Color_On=$Purple
+    else
+      local Color_On=$Red
     fi
-    # prompt $ or # for root
-    PS1+="\$ "
+    if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
+      branch=${BASH_REMATCH[1]}
+    else
+      # Detached HEAD. (branch=HEAD is a faster alternative.)
+      branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
+    fi
+    # add the result to prompt
+    PS1+="\[$Color_On\][$branch]\[$Color_Off\] "
+  fi
+  # prompt $ or # for root
+  PS1+="\$ "
 }
 PROMPT_COMMAND=__prompt_command
 
@@ -150,24 +150,24 @@ function ln()
 
 function bookends()
 {
-    head -n1 $1
-    tail -n1 $1
+  head -n1 $1
+  tail -n1 $1
 }
 
 function gerr()
 {
-    cd results/
-    logfile=$(ls -1 | grep "results-[0-9]\{10\}.log$" | tail -n 1)
-    tail -f -n 2000000 $logfile | grep ERROR
+  cd results/
+  logfile=$(ls -1 | grep "results-[0-9]\{10\}.log$" | tail -n 1)
+  tail -f -n 2000000 $logfile | grep ERROR
 }
 
 function glog()
 {
-    # Example usage:
-    #   glog "(ERROR|FAILED|Action|error|Error|ConnectionPool)"
-    logfile=$(ls -1 results/*.log| grep "results-[0-9]\{10\}.log$" | tail -n 1)
-    echo -e "Searching through \"$logfile\"...\n"
-    tail -f -n 2000000 $logfile | grep -P $1
+  # Example usage:
+  #   glog "(ERROR|FAILED|Action|error|Error|ConnectionPool)"
+  logfile=$(ls -1 results/*.log| grep "results-[0-9]\{10\}.log$" | tail -n 1)
+  echo -e "Searching through \"$logfile\"...\n"
+  tail -f -n 2000000 $logfile | grep -P $1
 }
 
 # ensure "old"-style docker daemon is running and connected
@@ -183,8 +183,8 @@ function dstart()
   # check if docker daemon is active
   if ! [ -z ${DOCKER_MACHINE_NAME+x} ] || docker-machine active 2>&1 | grep -q "No active host found"
   then
-      echo "connecting to docker daemon..."
-      eval $(docker-machine env)
+    echo "connecting to docker daemon..."
+    eval $(docker-machine env)
   fi
 }
 
@@ -192,17 +192,17 @@ function dstart()
 # It would be really great to get this working....
 # function gtw()
 # {
-#     HOURS=$1
-#     if ! [[ $HOURS =~ ^[0-9]+$ ]]  # not an integer
-#     then
-#         echo "Expected integer but found \"$HOURS\". Exiting..."
-#         return 1
-#     fi
+#   HOURS=$1
+#   if ! [[ $HOURS =~ ^[0-9]+$ ]]  # not an integer
+#   then
+#     echo "Expected integer but found \"$HOURS\". Exiting..."
+#     return 1
+#   fi
 #
-#     for COMMIT_HASH in $(git show origin/master..HEAD -q | grep -P "^commit" | grep -Po "[a-f0-9]{40}")
-#     do
-#         echo $COMMIT_HASH $HOURS
-#     done
+#   for COMMIT_HASH in $(git show origin/master..HEAD -q | grep -P "^commit" | grep -Po "[a-f0-9]{40}")
+#   do
+#     echo $COMMIT_HASH $HOURS
+#   done
 # }
 
 # ------------------------- INCLUDE OTHER STUFF ----------------------------- #
