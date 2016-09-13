@@ -3,7 +3,7 @@
 " git https://github.com/bifurcationman/dotfiles.git
 "
 """ create symlinks
-" .bin/make-symlinks.sh
+" bin/make-symlinks.sh
 "
 """ install vundle and plugins
 " git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim

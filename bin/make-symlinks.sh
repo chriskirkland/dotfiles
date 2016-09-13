@@ -26,7 +26,7 @@ try_backup() {
 # config
 PWD=`pwd`
 HOME=$($READLINK -f ~)
-FILES=(.vimrc .vim .pylintrc)
+FILES=(.bashrc .vimrc .vim .pylintrc)
 
 # install files
 for FILE in "${FILES[@]}"
