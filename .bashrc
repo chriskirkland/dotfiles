@@ -170,6 +170,24 @@ function glog()
     tail -f -n 2000000 $logfile | grep -P $1
 }
 
+# ensure "old"-style docker daemon is running and connected
+function dstart()
+{
+  # check if docker daemon is running
+  if docker-machine status | grep -q "Stopped"
+  then
+    echo "starting docker daemon..."
+    docker-machine start
+  fi
+
+  # check if docker daemon is active
+  if ! [ -z ${DOCKER_MACHINE_NAME+x} ] || docker-machine active 2>&1 | grep -q "No active host found"
+  then
+      echo "connecting to docker daemon..."
+      eval $(docker-machine env)
+  fi
+}
+
 # Git TimeWarp (moves git commits forward $1 hours)
 # It would be really great to get this working....
 # function gtw()
