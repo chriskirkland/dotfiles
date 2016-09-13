@@ -47,6 +47,12 @@ then
   # requires Homebrew coreutils (`brew install coreutils`)
   alias grep='ggrep'
   alias date='gdate'
+  alias readlink='greadlink'
+
+  # install gnu-getopt
+  #   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+  #   brew install gnu-getopt
+  alias getopt='/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt'
 
   # macvim
   alias vim='mvim -v'
@@ -113,6 +119,35 @@ function __prompt_command()
 PROMPT_COMMAND=__prompt_command
 
 # -------------------------- UTILITY FUNCTIONS ------------------------------ #
+# auto-expand relative paths for `ln`
+function ln()
+{
+  # argument parsing strategy taking adapted from
+  #   http://unix.stackexchange.com/a/156231
+
+  # parse flags
+  parsed_options=$(getopt -o Ffhinsv -- "$@")
+	eval "set -- $parsed_options"
+  FLAGS=""
+	while [ "$#" -gt 0 ]; do
+    case $1 in
+      (-[Ffhinsv]) FLAGS="$FLAGS $1"; shift;;
+      (--) shift; break;;
+      (*) exit 1 # should never be reached.
+    esac
+  done
+
+  # parse non-flag arguments and expand paths
+  PATHS=""
+  while [ "$#" -gt 0 ]; do
+    PATHS="$PATHS $(readlink -f $1)"
+    shift
+  done
+
+  # run command
+  eval "ln \"$FLAGS\" \"$PATHS\""
+}
+
 function bookends()
 {
     head -n1 $1
