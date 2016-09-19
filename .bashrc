@@ -207,6 +207,9 @@ function dstart()
 
 # ------------------------- INCLUDE OTHER STUFF ----------------------------- #
 # source other private and/or machine specific configurations
-for f in ~/.bash/*; do
-  source $f
-done
+PLUGIN_DIR=~/.bash
+if [ -d "$PLUGIN_DIR" ]; then
+  for f in $PLUGIN_DIR/*; do
+    source $f
+  done
+fi
