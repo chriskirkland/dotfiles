@@ -78,6 +78,12 @@ set nu
 set rnu
 syntax on
 
+" tab defaults
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+
 " disable arrow keys
 noremap <up>    :echom 'Stop being dumb...'<CR>
 noremap <down>  :echom 'Stop being dumb...'<CR>
@@ -126,29 +132,6 @@ let g:syntastic_check_on_open = 1 " check syntax on file open
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
-" flake8
-autocmd BufWritePost *.py call Flake8() " PEP8 check every time you save a python file
-
-" python specific
-" set colorcolumn=80
-" highlight ColorColumn ctermbg=235
-" math ColorColumn /\%81v.\+/
-fu! PythonSettings()
-  " 80 column highlighting
-  highlight OverLength ctermbg=lightgrey ctermfg=white guibg=#592929
-  match OverLength /\%81v.\+/
-
-  " code folding
-  let g:pymode_folding=0
-  " set foldmethod=indent
-  " set foldnestmax=2
-endfunction
-au BufWinEnter *.py  call PythonSettings()
-autocmd FileType python :iabbrev <buffer> iff if:<left>
-
-" Golang specific
-let g:go_fmt_command = "goimports"
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """  General
@@ -174,22 +157,6 @@ vnoremap > >gv
 " highlight word under cursor
 autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
 
-" code folding
-let g:codefold_all_on=1
-function! PythonFoldToggle()
-  if g:codefold_all_on
-    normal zE
-    let g:codefold_all=1
-  else
-    normal zM
-    let g:codefold_all=0
-  endif
-endfunction
-nnoremap <space> za
-vnoremap <space> zf
-nnoremap F :call PythonFoldToggle()<CR>
-vnoremap F :call PythonFoldToggle()<CR>
-
 let g:quickfix_is_open = 1
 " toggle QuickFix window
 function! QuickFixToggle()
@@ -206,8 +173,6 @@ nnoremap <c-d> :call QuickFixToggle()<CR>
 " toggle paste mode
 set pastetoggle=<F12> " doesn't work with <c-\>???
 
-let g:flake8_show_in_file=0
-
 " vim-indent-guides specifics
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'go']
 let g:indent_guides_enable_on_vim_startup = 1
@@ -217,27 +182,8 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=grey ctermbg=8  " dark
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 
-" Golang specific
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <Leader>r <Plug>(go-run)
-au FileType go nmap <Leader>b <Plug>(go-build)
-au FileType go nmap <Leader>t <Plug>(go-test)
-au FileType go nmap gd <Plug>(go-def-tab)
-au FileType go inoremap <space><space> <c-x><c-o>
-
 " cursorline (only in Normal mode)
 " set cursorline
 " highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 " autocmd InsertEnter * set nocursorline
 " autocmd InsertLeave * set cursorline
-
-" FileType specific settings
-" autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 | endif  " no extension
-" autocmd FileType * setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-" autocmd FileType yaml,yml,sh,sass,pug,js setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-" autocmd FileType py,go setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4 shiftround
-set expandtab
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2

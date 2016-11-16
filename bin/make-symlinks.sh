@@ -26,7 +26,7 @@ try_backup() {
 # config
 PWD=`pwd`
 HOME=$($READLINK -f ~)
-FILES=(.bashrc .vimrc .vim .pylintrc)
+FILES=(.bashrc .vimrc .vim .pylintrc `ls $HOME/.vim/after/ftplugin/*`)
 
 # install files
 for FILE in "${FILES[@]}"
