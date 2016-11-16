@@ -205,6 +205,44 @@ function dstart()
 #   done
 # }
 
+# nvbn/thefuck
+#   brew install thefuck && source ~/.bashrc
+eval $(thefuck --alias fk)
+
+# setup web development workflow for pug/sass
+function wdlaunch()
+{
+  # set defaults
+  PUG_FROM_DIR="pug"
+  PUG_TO_DIR="."
+  SASS_FROM_DIR="sass"
+  SASS_TO_DIR="css"
+
+  # pull from conf if it exists
+  CONF="`PWD`/.wdlaunch.conf"
+  if [ -f "$CONF" ]; then
+    source $CONF
+  fi
+
+  # resolve paths
+  PUG_FROM_DIR=$(readlink -f $PUG_FROM_DIR)
+  PUG_TO_DIR=$(readlink -f $PUG_TO_DIR)
+  SASS_FROM_DIR=$(readlink -f  $SASS_FROM_DIR)
+  SASS_TO_DIR=$(readlink -f $SASS_TO_DIR)
+
+  # render pug --> html
+  pug -P ${PUG_FROM_DIR} --out ${PUG_TO_DIR}
+  pug --watch -P ${PUG_FROM_DIR} --out ${PUG_TO_DIR} &
+
+  # render sass --> css
+  SASS_ARGS="--quiet --sourcemap=none --style=expanded"
+  # sass $SASS_ARGS ${SASS_FROM_DIR}:${SASS_TO_DIR}
+  sass --watch $SASS_ARGS ${SASS_FROM_DIR}:${SASS_TO_DIR} &
+
+  # wait on child processes
+  wait
+}
+
 # ------------------------- INCLUDE OTHER STUFF ----------------------------- #
 # source other private and/or machine specific configurations
 PLUGIN_DIR=~/.bash

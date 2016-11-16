@@ -40,6 +40,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'fatih/vim-go'
+Plugin 'digitaltoad/vim-pug'
 
 " Other Plugins
 Plugin 'L9'
@@ -120,6 +121,10 @@ let g:ctrlp_clear_cache_on_exit=0
 
 " syntastic
 let g:syntastic_check_on_open = 1 " check syntax on file open
+" make saving/opening files less laggy when used with vim-go
+"   src: https://github.com/fatih/vim-go#using-with-syntastic
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " flake8
 autocmd BufWritePost *.py call Flake8() " PEP8 check every time you save a python file
@@ -223,12 +228,16 @@ au FileType go inoremap <space><space> <c-x><c-o>
 
 " cursorline (only in Normal mode)
 " set cursorline
-highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-autocmd InsertEnter * set nocursorline
-autocmd InsertLeave * set cursorline
+" highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+" autocmd InsertEnter * set nocursorline
+" autocmd InsertLeave * set cursorline
 
 " FileType specific settings
 " autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 | endif  " no extension
-" autocmd FileType yaml,yml,sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd FileType * setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd FileType py,go setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4 shiftround
+" autocmd FileType * setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" autocmd FileType yaml,yml,sh,sass,pug,js setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+" autocmd FileType py,go setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4 shiftround
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
