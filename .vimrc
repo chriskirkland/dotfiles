@@ -40,6 +40,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'fatih/vim-go'
+" Plugin 'elixir-lang/vim-elixir'
 Plugin 'digitaltoad/vim-pug'
 
 " Other Plugins

@@ -33,8 +33,8 @@ alias gs='git status -uno'
 alias gsall='git status'
 
 # golang
-export GOPATH="$HOME/git/"
-export GOROOT=/usr/local/opt/go/libexec
+export GOPATH=$HOME/git
+export GOROOT=/usr/local/go
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 # cron
@@ -177,6 +177,7 @@ function dstart()
   if docker-machine status | grep -q "Stopped"
   then
     echo "starting docker daemon..."
+    # DOCKER_OPTS="--bip 10.255.0.1/16" docker-machine start
     docker-machine start
   fi
 
