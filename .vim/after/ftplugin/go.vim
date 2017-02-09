@@ -11,5 +11,6 @@ au FileType go nmap <Leader>gd <Plug>(go-doc)
 au FileType go nmap <Leader>r <Plug>(go-run)
 au FileType go nmap <Leader>b <Plug>(go-build)
 au FileType go nmap <Leader>t <Plug>(go-test)
+au FileType go nmap <Leader>tf <Plug>(go-test)
 au FileType go nmap gd <Plug>(go-def-tab)
 au FileType go inoremap <space><space> <c-x><c-o>

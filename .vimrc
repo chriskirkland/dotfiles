@@ -155,8 +155,9 @@ set timeoutlen=250 " wait 300 ms for follow-up keys before executing
 vnoremap < <gv
 vnoremap > >gv
 
-" highlight word under cursor
-autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
+" quickfix navigation
+noremap <c-n> :cprevious<CR>
+noremap <c-m> :cnext<CR>
 
 let g:quickfix_is_open = 1
 " toggle QuickFix window
@@ -169,7 +170,10 @@ function! QuickFixToggle()
     let g:quickfix_is_open = 1
   endif
 endfunction
-nnoremap <c-d> :call QuickFixToggle()<CR>
+nnoremap <c-f> :call QuickFixToggle()<CR>
+
+" highlight word under cursor
+autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
 
 " toggle paste mode
 set pastetoggle=<F12> " doesn't work with <c-\>???
