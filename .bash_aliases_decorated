@@ -1,0 +1,48 @@
+# general
+alias hg='history | grep'  # should use rev-search in place of this...
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias l='ls'
+alias c='clear'
+alias ve='vim ~/.vimrc'
+alias vb='vim ~/.bashrc'
+alias sb='source ~/.bashrc'
+alias mhg='\hg'  # give access to mercurial 'hg'
+
+# git
+alias ga='git add'
+alias gb='git branch'
+alias gc='git commit'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gh='git heh -20'
+alias gk='git checkout'
+alias gl='git lol -20'
+alias gs='git status -uno'
+alias gsall='git status'
+
+# golang
+alias gtc='go test -cover $(go list ./... | grep -v /vendor/)'
+alias gfa='go fmt $(go list ./... | grep -v /vendor/)'
+alias gth='go test -coverprofile=/tmp/coverage.out && go tool cover -html=/tmp/coverage.out'
+
+# OSX specific
+if [ `uname` == "Darwin" ]
+then
+  # remap Mac --> GNU utils
+  # requires Homebrew coreutils (`brew install coreutils`)
+  alias grep='ggrep'
+  alias date='gdate'
+  alias readlink='greadlink'
+
+  # install gnu-getopt
+  #   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+  #   brew install gnu-getopt
+  alias getopt='/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt'
+
+  # macvim
+  alias vim='mvim -v'
+fi

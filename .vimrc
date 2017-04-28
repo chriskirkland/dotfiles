@@ -51,6 +51,10 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " Plugin 'klen/python-mode'
 " Plugin 'sgeb/vim-diff-fold'
 
+" gS and gJ to split and join structs (resp); not AST aware so you must be on the
+" line with the struct definition (i.e. not the middle of the struct).
+Plugin 'AndrewRadev/splitjoin.vim'
+
 " non-vundle Plugins
 " https://valloric.github.io/YouCompleteMe/#intro  # autocomplete
 " Plugin 'Valloric/YouCompleteMe'
@@ -189,6 +193,6 @@ let g:indent_guides_guide_size = 1
 
 " cursorline (only in Normal mode)
 " set cursorline
-" highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 " autocmd InsertEnter * set nocursorline
 " autocmd InsertLeave * set cursorline

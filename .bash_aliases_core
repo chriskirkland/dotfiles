@@ -1,0 +1,17 @@
+# OSX specific
+if [ `uname` == "Darwin" ]
+then
+  # remap Mac --> GNU utils
+  # requires Homebrew coreutils (`brew install coreutils`)
+  alias grep='ggrep'
+  alias date='gdate'
+  alias readlink='greadlink'
+
+  # install gnu-getopt
+  #   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+  #   brew install gnu-getopt
+  alias getopt='/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt'
+
+  # macvim
+  alias vim='mvim -v'
+fi

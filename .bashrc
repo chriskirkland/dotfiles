@@ -6,32 +6,6 @@ stty -ixon
 HISTSIZE=10000
 HISTFILESIZE=20000
 
-# general
-alias hg='history | grep'  # should use rev-search in place of this...
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias l='ls'
-alias c='clear'
-alias ve='vim ~/.vimrc'
-alias vb='vim ~/.bashrc'
-alias sb='source ~/.bashrc'
-alias mhg='\hg'  # give access to mercurial 'hg'
-
-# git
-alias ga='git add'
-alias gb='git branch'
-alias gc='git commit'
-alias gd='git diff'
-alias gdc='git diff --cached'
-alias gh='git heh -20'
-alias gk='git checkout'
-alias gl='git lol -20'
-alias gs='git status -uno'
-alias gsall='git status'
-
 # golang
 export GOPATH=$HOME/git
 export GOROOT=/usr/local/go
@@ -40,58 +14,36 @@ export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 # cron
 export EDITOR=vim
 
-# OSX specific
-if [ `uname` == "Darwin" ]
-then
-  # remap Mac --> GNU utils
-  # requires Homebrew coreutils (`brew install coreutils`)
-  alias grep='ggrep'
-  alias date='gdate'
-  alias readlink='greadlink'
-
-  # install gnu-getopt
-  #   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
-  #   brew install gnu-getopt
-  alias getopt='/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt'
-
-  # macvim
-  alias vim='mvim -v'
-fi
-
 # ------------------------------ TERMINAL SETTINGS --------------------------- #
 # terminal coloring
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
-# prompt style
+# default prompt style
 export PS1="[\@] \u> "
 
-# FROM http://www.terminally-incoherent.com/blog/2013/01/14/whats-in-your-bash-prompt/
+# Based on http://www.terminally-incoherent.com/blog/2013/01/14/whats-in-your-bash-prompt/
 # Colors
-Color_Off="\033[0m"
-Red="\033[0;31m"
-Green="\033[0;32m"
-Purple="\033[0;35m"
+Color_Off='\033[0m'
+Red='\033[0;31m'
+Green='\033[0;32m'
+Purple='\033[0;35m'
 # local config
 uname="cmkirkla"
 hname="mymbp"
-# set up command prompt
+# setup command prompt
 function __prompt_command()
 {
   # capture the exit status of the last command
   EXIT="$?"
-  PS1=""
 
-  if [ $EXIT -eq 0 ]; then PS1+="\[$Green\][\!]\[$Color_Off\] "; else PS1+="\[$Red\][\!]\[$Color_Off\] "; fi
+  PS1='> '
+  _PROMPT=""
 
-  # if logged in via ssh shows the ip of the client
-  if [ -n "$SSH_CLIENT" ]; then PS1+="\[$Yellow\]("${$SSH_CLIENT%% *}")\[$Color_Off\]"; fi
-
-  # debian chroot stuff (take it or leave it)
-  PS1+="${debian_chroot:+($debian_chroot)}"
+  # previous command exit code indicator
+  if [ $EXIT -eq 0 ]; then _PROMPT+="${Green}\u2714${Color_Off} "; else _PROMPT+="${Red}\u2718${Color_Off} "; fi
 
   # basic information (user@host:path)
-  #PS1+="\[$BRed\]\u\[$Color_Off\]@\[$BRed\]\h\[$Color_Off\]:\[$BPurple\]\w\[$Color_Off\] "
-  PS1+="\[$BRed\]$uname\[$Color_Off\]@\[$BRed\]$hname\[$Color_Off\]:\[$BPurple\]\w\[$Color_Off\] "
+  _PROMPT+="${BRed}${uname}${Color_Off}@${BRed}${hname}${Color_Off}:${BPurple}$(dirs -0)${Color_Off} "
 
   # check if inside git repo
   local git_status="`git status -unormal 2>&1`"
@@ -111,10 +63,13 @@ function __prompt_command()
       branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
     fi
     # add the result to prompt
-    PS1+="\[$Color_On\][$branch]\[$Color_Off\] "
+    _PROMPT+="${Color_On}[${branch}]${Color_Off} "
   fi
-  # prompt $ or # for root
-  PS1+="\$ "
+
+  #TODO(cmkirkla): There is a bug with switching vi modes in bash.  Whenever you switch modes on the 1-line version fo the prompt
+  #  (commented out here), the line doesn't full refresh so your cursor puts you in the middle of the bash prompt for editing.
+  #echo -e "$_PROMPT\c"
+  echo -e "$_PROMPT"
 }
 PROMPT_COMMAND=__prompt_command
 
@@ -206,10 +161,6 @@ function dstart()
 #   done
 # }
 
-# nvbn/thefuck
-#   brew install thefuck && source ~/.bashrc
-eval $(thefuck --alias fk)
-
 # setup web development workflow for pug/sass
 function wdlaunch()
 {
@@ -244,6 +195,29 @@ function wdlaunch()
   wait
 }
 
+# prints the underlying command for an alias
+function print_alias() {
+  BLUE="\033[1;34m" # Light Blue
+  NC='\033[0m' # No Color
+  printf ">>> Running ${BLUE}$(alias $@ | cut -d"'" -f2 | cut -d";" -f2- | cut -d'&' -f3-| xargs)${NC}\n"
+}
+
+### source aliases to decorate
+shopt -s expand_aliases
+source ~/.bash_aliases_decorated
+
+### Decorate all aliases to print the underlying command (educational purposes)
+while IFS='' read -r ALIAS
+do
+  ALIAS_NAME=$(echo $ALIAS | cut -d'=' -f1)
+  ALIAS_VAL=$(echo $ALIAS | cut -d'=' -f2- | cut -d"'" -f2)
+  cmd="alias ${ALIAS_NAME}='print_alias ${ALIAS_NAME} && ${ALIAS_VAL}'"
+  eval "$cmd" # THIS LINE DOESN'T WORK!!!
+done < <(alias | cut -d' ' -f2-)
+
+# source core aliases (not to be decorated); e.g. ggrep-->grep
+source ~/.bash_aliases_core
+
 # ------------------------- INCLUDE OTHER STUFF ----------------------------- #
 # source other private and/or machine specific configurations
 PLUGIN_DIR=~/.bash
@@ -252,3 +226,8 @@ if [ -d "$PLUGIN_DIR" ]; then
     source $f
   done
 fi
+
+### Added by the Bluemix CLI
+source /usr/local/Bluemix/bx/bash_autocomplete
+
+
