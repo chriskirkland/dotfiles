@@ -14,6 +14,9 @@ export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 # cron
 export EDITOR=vim
 
+# ansible
+export ANSIBLE_NOCOWS=1
+
 # ------------------------------ TERMINAL SETTINGS --------------------------- #
 # terminal coloring
 export CLICOLOR=1
@@ -27,6 +30,8 @@ Color_Off='\033[0m'
 Red='\033[0;31m'
 Green='\033[0;32m'
 Purple='\033[0;35m'
+LightBlue='\e[94m'
+Dim='\e[2m'
 # local config
 uname="cmkirkla"
 hname="mymbp"
@@ -42,8 +47,13 @@ function __prompt_command()
   # previous command exit code indicator
   if [ $EXIT -eq 0 ]; then _PROMPT+="${Green}\u2714${Color_Off} "; else _PROMPT+="${Red}\u2718${Color_Off} "; fi
 
-  # basic information (user@host:path)
-  _PROMPT+="${BRed}${uname}${Color_Off}@${BRed}${hname}${Color_Off}:${BPurple}$(dirs -0)${Color_Off} "
+  # TODO(cmkirkla): add kubernetes context? Helm symbol --> \u2388
+  local kubernetes_context=$(kubectl config current-context 2>&1)
+  if [[ "$kubernetes_context" =~ "error: current-context is not set" ]]; then
+    _PROMPT+="${Dim}\u2388 (\u2205)${Color_Off} "
+  else
+    _PROMPT+="${LightBlue}\u2388 (${kubernetes_context})${Color_Off} "
+  fi
 
   # check if inside git repo
   local git_status="`git status -unormal 2>&1`"
@@ -56,6 +66,13 @@ function __prompt_command()
     else
       local Color_On=$Red
     fi
+    remote=$(git config --get remote.origin.url)
+    if echo $remote | grep -q https; then
+      repo=$(git config --get remote.origin.url | cut -d'/' -f5 | cut -d'.' -f1)
+    else
+      repo=$(git config --get remote.origin.url | cut -d'/' -f2 | cut -d'.' -f1)
+    fi
+
     if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
       branch=${BASH_REMATCH[1]}
     else
@@ -63,7 +80,10 @@ function __prompt_command()
       branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null || echo HEAD`)"
     fi
     # add the result to prompt
-    _PROMPT+="${Color_On}[${branch}]${Color_Off} "
+    _PROMPT+="${repo}:(${Color_On}${branch}${Color_Off}) "
+  else
+    # basic information (user@host:path)
+    _PROMPT+="${BRed}${uname}${Color_Off}@${BRed}${hname}${Color_Off}:${BPurple}$(dirs -0)${Color_Off} "
   fi
 
   #TODO(cmkirkla): There is a bug with switching vi modes in bash.  Whenever you switch modes on the 1-line version fo the prompt
@@ -199,6 +219,7 @@ function wdlaunch()
 function print_alias() {
   BLUE="\033[1;34m" # Light Blue
   NC='\033[0m' # No Color
+  #TODO(cmkirkla): include trailing command line args
   printf ">>> Running ${BLUE}$(alias $@ | cut -d"'" -f2 | cut -d";" -f2- | cut -d'&' -f3-| xargs)${NC}\n"
 }
 
@@ -229,5 +250,3 @@ fi
 
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/bash_autocomplete
-
-

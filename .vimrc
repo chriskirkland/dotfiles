@@ -120,6 +120,9 @@ autocmd BufWritePre * :%s/\s\+$//e
 set t_Co=256
 color wombat256mod
 
+" crontab
+au BufEnter /private/tmp/crontab.* setl backupcopy=yes
+
 " NerdTree
 noremap <Leader>n :NERDTreeToggle<CR>
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
