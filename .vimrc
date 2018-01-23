@@ -40,6 +40,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'fatih/vim-go'
+Plugin 'keith/swift.vim'
 " Plugin 'elixir-lang/vim-elixir'
 Plugin 'digitaltoad/vim-pug'
 
@@ -57,7 +58,8 @@ Plugin 'AndrewRadev/splitjoin.vim'
 
 " non-vundle Plugins
 " https://valloric.github.io/YouCompleteMe/#intro  # autocomplete
-" Plugin 'Valloric/YouCompleteMe'
+"   cd ~/.vim/bundle/plugin/YouCompleteMe/ && python install.py --gocode-completer
+Plugin 'Valloric/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

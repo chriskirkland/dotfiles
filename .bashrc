@@ -8,7 +8,7 @@ HISTFILESIZE=20000
 
 # golang
 export GOPATH=$HOME/git
-export GOROOT=/usr/local/go
+export GOROOT=/usr/local/Cellar/go/1.8.5/libexec  # remove this for go>=1.9
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 # cron
@@ -95,33 +95,33 @@ PROMPT_COMMAND=__prompt_command
 
 # -------------------------- UTILITY FUNCTIONS ------------------------------ #
 # auto-expand relative paths for `ln`
-function ln()
-{
-  # argument parsing strategy taking adapted from
-  #   http://unix.stackexchange.com/a/156231
-
-  # parse flags
-  parsed_options=$(getopt -o Ffhinsv -- "$@")
-	eval "set -- $parsed_options"
-  FLAGS=""
-	while [ "$#" -gt 0 ]; do
-    case $1 in
-      (-[Ffhinsv]) FLAGS="$FLAGS $1"; shift;;
-      (--) shift; break;;
-      (*) exit 1 # should never be reached.
-    esac
-  done
-
-  # parse non-flag arguments and expand paths
-  PATHS=""
-  while [ "$#" -gt 0 ]; do
-    PATHS="$PATHS $(readlink -f $1)"
-    shift
-  done
-
-  # run command
-  eval "ln \"$FLAGS\" \"$PATHS\""
-}
+#function ln()
+#{
+#  # argument parsing strategy taking adapted from
+#  #   http://unix.stackexchange.com/a/156231
+#
+#  # parse flags
+#  parsed_options=$(getopt -o Ffhinsv -- "$@")
+#	eval "set -- $parsed_options"
+#  FLAGS=""
+#	while [ "$#" -gt 0 ]; do
+#    case $1 in
+#      (-[Ffhinsv]) FLAGS="$FLAGS $1"; shift;;
+#      (--) shift; break;;
+#      (*) exit 1 # should never be reached.
+#    esac
+#  done
+#
+#  # parse non-flag arguments and expand paths
+#  PATHS=""
+#  while [ "$#" -gt 0 ]; do
+#    PATHS="$PATHS $(readlink -f $1)"
+#    shift
+#  done
+#
+#  # run command
+#  eval "ln \"$FLAGS\" \"$PATHS\""
+#}
 
 function bookends()
 {
@@ -215,12 +215,51 @@ function wdlaunch()
   wait
 }
 
-# prints the underlying command for an alias
-function print_alias() {
+# 'git update branch' - update current branch at "highest" relevant branch:
+#   {local upstream} > "upstream" > "origin" > "cmkirkla" > {first defined remote}
+function gub() {
+  # get local upstream if it exists
+  upstream=$(git config --local --get remote.upstream.fetch | cut -d '/' -f5)
+  if [ -z ${upstream} ]; then
+    # grab the "highest" ranked remote
+    remotes=$(git remote)
+    if [[ $remotes = *"upstream"* ]]; then
+      upstream="upstream"
+    elif [[ $remotes = *"origin"* ]]; then
+      upstream="origin"
+    elif [[ $remotes = *"cmkirkla"* ]]; then
+      upstream="cmkirkla"
+    else
+      upstream=$(git remote | head -n1)
+    fi
+  fi
+
+  git_status="`git status -unormal 2>&1`"
+  if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
+    branch=${BASH_REMATCH[1]}
+  else
+    # exit
+    >&2 echo "Either in detached head state or not in a git repo"
+  fi
+
   BLUE="\033[1;34m" # Light Blue
   NC='\033[0m' # No Color
+  PRE='\u203a\u203a\u203a'
+  pretty_print "git fetch ${upstream} && git merge --ff-only ${upstream}/${branch}"
+  git fetch ${upstream} && git merge --ff-only ${upstream}/${branch}
+}
+
+# prints the underlying command for an alias
+function print_alias() {
   #TODO(cmkirkla): include trailing command line args
-  printf ">>> Running ${BLUE}$(alias $@ | cut -d"'" -f2 | cut -d";" -f2- | cut -d'&' -f3-| xargs)${NC}\n"
+  pretty_print "$(alias $@ | cut -d"'" -f2 | cut -d";" -f2- | cut -d'&' -f3-| xargs)"
+}
+
+function pretty_print() {
+  BLUE="\033[1;34m" # Light Blue
+  NC='\033[0m' # No Color
+  PRE='\u203a\u203a\u203a' # Magic carrots
+  printf "${PRE} Running ${BLUE}$@${NC}\n"
 }
 
 ### source aliases to decorate
@@ -250,3 +289,5 @@ fi
 
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/bash_autocomplete
+
+eval $(thefuck --alias fk)
