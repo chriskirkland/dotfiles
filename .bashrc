@@ -218,8 +218,16 @@ function wdlaunch()
 # 'git update branch' - update current branch at "highest" relevant branch:
 #   {local upstream} > "upstream" > "origin" > "cmkirkla" > {first defined remote}
 function gub() {
+  git_status="`git status -unormal 2>&1`"
+  if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
+    branch=${BASH_REMATCH[1]}
+  else
+    # exit
+    >&2 echo "Either in detached head state or not in a git repo"
+  fi
+
   # get local upstream if it exists
-  upstream=$(git config --local --get remote.upstream.fetch | cut -d '/' -f5)
+  upstream=$(git config --local --get branch.${branch}.remote)
   if [ -z ${upstream} ]; then
     # grab the "highest" ranked remote
     remotes=$(git remote)
@@ -234,13 +242,6 @@ function gub() {
     fi
   fi
 
-  git_status="`git status -unormal 2>&1`"
-  if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
-    branch=${BASH_REMATCH[1]}
-  else
-    # exit
-    >&2 echo "Either in detached head state or not in a git repo"
-  fi
 
   BLUE="\033[1;34m" # Light Blue
   NC='\033[0m' # No Color
