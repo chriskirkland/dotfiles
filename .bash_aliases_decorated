@@ -24,6 +24,15 @@ alias gl='git lol -20'
 alias gs='git status -uno'
 alias gsall='git status'
 
+# kubernetes
+alias kg="kubectl get"
+alias kga="kubectl get --all-namespaces"
+alias kd="kubectl describe"
+alias kt="kubectl delete"
+alias ke="kubectl edit"
+alias kuc="kubectl config use-context"
+alias kgc="kubectl config get-clusters"
+
 # golang
 alias gtc='go test -cover $(go list ./... | grep -v /vendor/)'
 alias gfa='go fmt $(go list ./... | grep -v /vendor/)'
