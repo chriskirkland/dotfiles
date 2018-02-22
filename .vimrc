@@ -59,7 +59,7 @@ Plugin 'AndrewRadev/splitjoin.vim'
 " non-vundle Plugins
 " https://valloric.github.io/YouCompleteMe/#intro  # autocomplete
 "   cd ~/.vim/bundle/plugin/YouCompleteMe/ && python install.py --gocode-completer
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

@@ -10,3 +10,4 @@ export PATH=$HOME/.rbenv/shims:$PATH
 
 # don't ask for pwd for default SSH key
 ssh-add -K ~/.ssh/id_rsa
+export PATH="/usr/local/sbin:$PATH"

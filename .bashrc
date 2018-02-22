@@ -9,7 +9,7 @@ HISTFILESIZE=20000
 # golang
 export GOPATH=$HOME/git
 export GOROOT=/usr/local/Cellar/go/1.8.5/libexec  # remove this for go>=1.9
-export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:$HOME/bin
 
 # cron
 export EDITOR=vim

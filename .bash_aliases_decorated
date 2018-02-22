@@ -25,18 +25,23 @@ alias gs='git status -uno'
 alias gsall='git status'
 
 # kubernetes
+alias k="kubectl"
 alias kg="kubectl get"
 alias kga="kubectl get --all-namespaces"
 alias kd="kubectl describe"
 alias kt="kubectl delete"
 alias ke="kubectl edit"
+alias kx="kubectl exec"
 alias kuc="kubectl config use-context"
 alias kgc="kubectl config get-clusters"
+alias krc="export KUBECONFIG=~/.kube/armada/kubeconfig"
+alias ckube="ckube --kubeconfig $KUBECONFIG"
 
 # golang
 alias gtc='go test -cover $(go list ./... | grep -v /vendor/)'
-alias gfa='go fmt $(go list ./... | grep -v /vendor/)'
+alias gti='go test -gcflags=-l'
 alias gth='go test -coverprofile=/tmp/coverage.out && go tool cover -html=/tmp/coverage.out'
+alias gfa='go fmt $(go list ./... | grep -v /vendor/)'
 
 # OSX specific
 if [ `uname` == "Darwin" ]
