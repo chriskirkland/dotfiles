@@ -3,16 +3,16 @@
 stty -ixon
 
 # bash history
-HISTSIZE=10000
-HISTFILESIZE=20000
+HISTSIZE=1000000
+HISTFILESIZE=200000000
 
 # golang
 export GOPATH=$HOME/git
-export GOROOT=/usr/local/Cellar/go/1.8.5/libexec  # remove this for go>=1.9
-export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:$HOME/bin
+#export GOROOT=/usr/local/Cellar/go/1.8.5/libexec  # remove this for go>=1.9
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:$HOME/bin:$HOME/.scripts
 
 # cron
-export EDITOR=vim
+#export EDITOR=vim
 
 # ansible
 export ANSIBLE_NOCOWS=1
