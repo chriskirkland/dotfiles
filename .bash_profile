@@ -2,7 +2,7 @@
 if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
 
 # performance stuff
-ulimit -n 65536 65536
+# ulimit -n 65536 65536
 
 # ruby stuff
 [[ -s "/Users/chriskirkland/.gvm/scripts/gvm" ]] && source "/Users/chriskirkland/.gvm/scripts/gvm"

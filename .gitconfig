@@ -1,0 +1,40 @@
+[filter "lfs"]
+    clean = git-lfs clean %f
+    smudge = git-lfs smudge %f
+    required = true
+[core]
+    excludesfile = /Users/chriskirkland/.gitignore_global
+    whitespace = -indent-with-non-tabl
+    autocrlf = input
+	hooksPath = /Users/chriskirkland/.githooks/
+    # autocrlf = true
+[diff]
+    tool = vimdiff
+[difftool]
+    prompt = false
+[mergetool "sourcetree"]
+    cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+    trustExitCode = true
+[user]
+    name = Christopher Kirkland
+    email = cmkirkla@us.ibm.com
+[mergetool]
+    keepBackup = false
+[http]
+    sslVerify = true
+[alias]
+    lol = log --graph --abbrev-commit --decorate --format='%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(bold white)%s%C(reset) %C(white)- %an%C(reset)%C(auto)%d%C(reset)' --all
+    heh = log --graph --oneline --decorate
+[push]
+    default = simple
+    followTags = true
+[credential]
+    helper = osxkeychain
+[gitreview]
+    username = chriskirkland
+[http "https://gopkg.in"]
+    followRedirects = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[url "git@github.ibm.com:"]
+	insteadOf = https://github.ibm.com/

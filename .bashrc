@@ -289,6 +289,8 @@ if [ -d "$PLUGIN_DIR" ]; then
 fi
 
 ### Added by the Bluemix CLI
-source /usr/local/Bluemix/bx/bash_autocomplete
+#source /usr/local/Bluemix/bx/bash_autocomplete
 
 eval $(thefuck --alias fk)
+
+eval $(thefuck --alias)
