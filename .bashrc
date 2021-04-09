@@ -8,7 +8,8 @@ HISTFILESIZE=200000000
 
 # golang
 export GOPATH=$HOME/git
-#export GOROOT=/usr/local/Cellar/go/1.8.5/libexec  # remove this for go>=1.9
+export GO111MODULE=on
+export GOPRIVATE=*github.com/github/*
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:$HOME/bin:$HOME/.scripts
 
 # cron
@@ -294,3 +295,49 @@ fi
 eval $(thefuck --alias fk)
 
 eval $(thefuck --alias)
+
+### github helpers
+
+function gcr_inner() {
+  local ORG_AND_REPO=$1
+  local PREVIOUS_DIR=$(pwd)
+
+  local GITHUB_HOME="$HOME/git/src/github.com"
+  cd $GITHUB_HOME
+
+  # early return if repo already exists
+  if [ -d "$ORG_AND_REPO" ];
+  then
+    echo "repo already exists..."
+    echo "entering $GITHUB_HOME/$ORG/$REPO/"
+    cd $GITHUB_HOME/$ORG/$REPO/
+    return 0
+  fi
+
+  local partsArr=(${ORG_AND_REPO//\// })
+  ORG=${partsArr[0]}
+  REPO=${partsArr[1]}
+
+  # ensure ORG is setup and enter
+  if [ ! -d "$ORG" ];
+  then
+    echo "org $ORG is missing. setting up..."
+    mkdir $ORG
+  fi
+  echo "entering $GITHUB_HOME/$ORG/"
+  cd $GITHUB_HOME/$ORG/
+
+  # clone REPO and enter
+  git clone git@github.com:$ORG_AND_REPO.git
+  echo "entering $GITHUB_HOME/$ORG/$REPO/"
+  cd $GITHUB_HOME/$ORG/$REPO/
+  return 0
+}
+
+function gcr() {
+  # if the new repo checkout fails, put us back into our previous pwd
+  if ! gcr_inner $1; then
+    echo "repo clone failed. backing out..."
+    cd $PREVIOUS_DIR
+  fi
+}
