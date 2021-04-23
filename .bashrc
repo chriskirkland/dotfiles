@@ -3,14 +3,19 @@
 stty -ixon
 
 # bash history
-HISTSIZE=1000000
-HISTFILESIZE=200000000
+export HISTSIZE=1000000
+export HISTFILESIZE=200000000
 
 # golang
 export GOPATH=$HOME/git
 export GO111MODULE=on
 export GOPRIVATE=*github.com/github/*
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:$HOME/bin:$HOME/.scripts
+
+# ruby
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+# dotcom
+export PATH="/Users/chriskirkland/git/src/github.com/github/github/bin:$PATH"
 
 # cron
 #export EDITOR=vim
@@ -280,6 +285,10 @@ done < <(alias | cut -d' ' -f2-)
 # source core aliases (not to be decorated); e.g. ggrep-->grep
 source ~/.bash_aliases_core
 
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+
 # ------------------------- INCLUDE OTHER STUFF ----------------------------- #
 # source other private and/or machine specific configurations
 PLUGIN_DIR=~/.bash
@@ -309,14 +318,14 @@ function gcr_inner() {
   if [ -d "$ORG_AND_REPO" ];
   then
     echo "repo already exists..."
-    echo "entering $GITHUB_HOME/$ORG/$REPO/"
-    cd $GITHUB_HOME/$ORG/$REPO/
+    echo "entering $GITHUB_HOME/$ORG_AND_REPO/"
+    cd $GITHUB_HOME/$ORG_AND_REPO/
     return 0
   fi
 
   local partsArr=(${ORG_AND_REPO//\// })
-  ORG=${partsArr[0]}
-  REPO=${partsArr[1]}
+  local ORG=${partsArr[0]}
+  local REPO=${partsArr[1]}
 
   # ensure ORG is setup and enter
   if [ ! -d "$ORG" ];
@@ -328,7 +337,7 @@ function gcr_inner() {
   cd $GITHUB_HOME/$ORG/
 
   # clone REPO and enter
-  git clone git@github.com:$ORG_AND_REPO.git
+  git clone --depth 1 git@github.com:$ORG_AND_REPO.git
   echo "entering $GITHUB_HOME/$ORG/$REPO/"
   cd $GITHUB_HOME/$ORG/$REPO/
   return 0

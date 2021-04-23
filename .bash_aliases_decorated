@@ -18,12 +18,27 @@ alias ga='git add'
 alias gb='git branch'
 alias gc='git diff --check && git commit'
 alias gd='git diff'
+alias gdm='git diff main'
 alias gdc='git diff --cached'
-alias gh='git heh -20'
+alias gdmc='git diff main --cached'
 alias gk='git checkout'
+alias gkm='git checkout main 2>/dev/null || git checkout master'
 alias gl='git lol -20'
 alias gs='git status -uno'
 alias gsall='git status'
+# git autocomplete helpers
+__git_complete ga _git_add
+__git_complete gb _git_branch
+__git_complete gc _git_diff
+__git_complete gd _git_diff
+__git_complete gdm _git_diff
+__git_complete gdc _git_diff
+__git_complete gdmc _git_diff
+__git_complete gk _git_checkout
+__git_complete gkm _git_checkout
+__git_complete gs _git_status
+__git_complete gsall _git_status
+
 
 # kubernetes
 alias k="kubectl"
@@ -55,7 +70,9 @@ alias gth='go test -coverprofile=/tmp/coverage.out && go tool cover -html=/tmp/c
 alias gfa='go fmt $(go list ./... | grep -v /vendor/)'
 alias de='dep ensure -v'
 alias dea='dep ensure -v -add'
-alias gsg='grep --include=*.go --exclude=*_test.go --exclude-dir=vendor -r'
+alias gogrep='grep --include=*.go --exclude=*_test.go --exclude-dir=vendor -r'
+alias gogrepit='grep --include=*.go --exclude-dir=vendor -r'
+alias rbgrep='grep --include=*.rb --exclude-dir=test --exclude-dir=vendor -r'
 
 # ruby
 alias irb='irb -I .'
@@ -77,8 +94,3 @@ then
   # macvim
   alias vim='mvim -v'
 fi
-
-# bluemix
-alias pat='cat ~/.bluemix/config.json | jq -r .IAMToken | cut -d" " -f2 | pbcopy'
-alias prt='cat ~/.bluemix/config.json | jq -r .IAMRefreshToken | cut -d" " -f2 | pbcopy'
-

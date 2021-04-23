@@ -16,8 +16,8 @@
     cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
     trustExitCode = true
 [user]
-    name = Christopher Kirkland
-    email = cmkirkla@us.ibm.com
+    name = Chris Kirkland
+    email = chriskirkland@github.com
 [mergetool]
     keepBackup = false
 [http]
@@ -36,5 +36,3 @@
     followRedirects = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
-[url "git@github.ibm.com:"]
-	insteadOf = https://github.ibm.com/

@@ -40,6 +40,7 @@ Plugin 'nvie/vim-flake8'
 " Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'fatih/vim-go'
+Plugin 'vim-ruby/vim-ruby'
 Plugin 'keith/swift.vim'
 " Plugin 'elixir-lang/vim-elixir'
 Plugin 'digitaltoad/vim-pug'
@@ -56,6 +57,7 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " line with the struct definition (i.e. not the middle of the struct).
 Plugin 'AndrewRadev/splitjoin.vim'
 
+Plugin 'valloric/youcompleteme'
 " non-vundle Plugins
 " https://valloric.github.io/YouCompleteMe/#intro  # autocomplete
 "   cd ~/.vim/bundle/plugin/YouCompleteMe/ && python install.py --gocode-completer
