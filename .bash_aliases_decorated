@@ -39,7 +39,6 @@ __git_complete gkm _git_checkout
 __git_complete gs _git_status
 __git_complete gsall _git_status
 
-
 # kubernetes
 alias k="kubectl"
 alias kg="kubectl get"
@@ -72,7 +71,8 @@ alias de='dep ensure -v'
 alias dea='dep ensure -v -add'
 alias gogrep='grep --include=*.go --exclude=*_test.go --exclude-dir=vendor -r'
 alias gogrepit='grep --include=*.go --exclude-dir=vendor -r'
-alias rbgrep='grep --include=*.rb --exclude-dir=test --exclude-dir=vendor -r'
+alias rbgrep='grep --include=*.rb --exclude-dir=test --exclude-dir=vendor --exclude-dir=db -r'
+alias rbgrepit='grep --include=*.rb --exclude-dir=vendor --exclude-dir=db -r'
 
 # ruby
 alias irb='irb -I .'

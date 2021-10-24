@@ -161,6 +161,8 @@ nnoremap <c-q><c-q> :q!<CR>
 vnoremap <c-q><c-q> <Esc><c-q><c-q>
 inoremap <c-q><c-q> <Esc><c-q><c-q>
 set timeoutlen=250 " wait 300 ms for follow-up keys before executing
+" allow scrolling beyond EOF
+set scrolloff=99
 
 " visual code block indenting
 vnoremap < <gv

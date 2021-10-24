@@ -15,7 +15,7 @@ export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:$HOME/bin:$HOME/.scripts
 # ruby
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 # dotcom
-export PATH="/Users/chriskirkland/git/src/github.com/github/github/bin:$PATH"
+#export PATH="/Users/chriskirkland/git/src/github.com/github/github/bin:$PATH"
 
 # cron
 #export EDITOR=vim
@@ -170,6 +170,11 @@ function dstart()
   fi
 }
 
+# enable git tab completion
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+
 # Git TimeWarp (moves git commits forward $1 hours)
 # It would be really great to get this working....
 # function gtw()
@@ -285,10 +290,6 @@ done < <(alias | cut -d' ' -f2-)
 # source core aliases (not to be decorated); e.g. ggrep-->grep
 source ~/.bash_aliases_core
 
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-fi
-
 # ------------------------- INCLUDE OTHER STUFF ----------------------------- #
 # source other private and/or machine specific configurations
 PLUGIN_DIR=~/.bash
@@ -313,6 +314,12 @@ function gcr_inner() {
 
   local GITHUB_HOME="$HOME/git/src/github.com"
   cd $GITHUB_HOME
+
+  # default to 'github' org is no prefix provided
+  if [[ "$ORG_AND_REPO" != *"/"* ]]; then
+    echo "defaulting to 'github' org"
+    ORG_AND_REPO="github/$ORG_AND_REPO"
+  fi
 
   # early return if repo already exists
   if [ -d "$ORG_AND_REPO" ];
@@ -350,3 +357,12 @@ function gcr() {
     cd $PREVIOUS_DIR
   fi
 }
+
+function orb() {
+  # open repo in browser
+  local ORG_AND_REPO=$(git rev-parse --show-toplevel | rev | cut -d '/' -f1-2 | rev)
+  open "https://github.com/$ORG_AND_REPO"
+}
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

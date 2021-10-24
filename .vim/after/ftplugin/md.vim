@@ -1,1 +1,1 @@
-au BufRead,BufNewFile *.md setlocal textwidth=80
+/Users/chriskirkland/git/github.com/chriskirkland/dotfiles/.vim/after/ftplugin/md.vim
