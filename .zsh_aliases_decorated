@@ -1,0 +1,84 @@
+# general
+alias hg='history | grep'  # should use rev-search in place of this...
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias l='ls'
+alias c='clear'
+alias ve='vim ~/.vimrc'
+alias vz='vim ~/.zshrc'
+alias sz='source ~/.zshrc'
+alias mhg='\hg'  # give access to mercurial 'hg'
+alias pjq='pbpaste | jq .'
+
+# git
+alias ga='git add'
+alias gb='git branch'
+alias gc='git diff --check && git commit'
+alias gd='git diff'
+alias gdm='git diff main'
+alias gdc='git diff --cached'
+alias gdmc='git diff main --cached'
+alias gk='git checkout'
+alias gkm='git checkout main 2>/dev/null || git checkout master'
+alias gl='git lol -20'
+alias gs='git status -uno'
+alias gsall='git status'
+
+# kubernetes
+alias k="kubectl"
+alias kg="kubectl get"
+alias kga="kubectl get --all-namespaces"
+alias kd="kubectl describe"
+alias kt="kubectl delete"
+alias ke="kubectl edit"
+alias kx="kubectl exec"
+alias kuc="kubectl config use-context"
+alias kgc="kubectl config get-clusters"
+alias krc="export KUBECONFIG=~/.kube/armada/kubeconfig"
+# set contexts namespace
+alias ks="kubectl config set-context \$(kubectl config current-context) --namespace"
+alias ksk="kubectl config set-context \$(kubectl config current-context) --namespace kube-system"
+alias ksa="kubectl config set-context \$(kubectl config current-context) --namespace armada"
+alias ksd="kubectl config set-context \$(kubectl config current-context) --namespace default"
+alias ckube="ckube --kubeconfig \$KUBECONFIG"
+
+# ibm container service
+alias cs="bx cs"
+alias blsa="bx login -a https://api.stage1.ng.bluemix.net --apikey"
+alias blpa="bx login -a https://api.ng.bluemix.net --apikey"
+
+# golang
+alias gtc='go test -cover $(go list ./... | grep -v /vendor/)'
+alias gti='go test -gcflags=-l'
+alias gth='go test -coverprofile=/tmp/coverage.out && go tool cover -html=/tmp/coverage.out'
+alias gfa='go fmt $(go list ./... | grep -v /vendor/)'
+alias de='dep ensure -v'
+alias dea='dep ensure -v -add'
+alias gogrep='grep --include=*.go --exclude=*_test.go --exclude-dir=vendor -r'
+alias gogrepit='grep --include=*.go --exclude-dir=vendor -r'
+alias rbgrep='grep --include=*.rb --exclude-dir=test --exclude-dir=vendor --exclude-dir=db -r'
+alias rbgrepit='grep --include=*.rb --exclude-dir=vendor --exclude-dir=db -r'
+
+# ruby
+alias irb='irb -I .'
+
+# OSX specific
+if [ `uname` = "Darwin" ]
+then
+  # remap Mac --> GNU utils
+  # requires Homebrew coreutils (`brew install coreutils`)
+  alias grep='ggrep'
+  alias date='gdate'
+  alias readlink='greadlink'
+
+  # install gnu-getopt
+  #   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+  #   brew install gnu-getopt
+  alias getopt='/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt'
+
+  # macvim
+  alias vim='mvim -v'
+fi
