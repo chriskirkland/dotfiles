@@ -63,7 +63,7 @@ All git aliases include tab completion support for enhanced productivity.
 | `gdc` | `git diff --cached` | Show staged changes |
 | `gdmc` | `git diff main --cached` | Show staged differences between current branch and main |
 | `gk` | `git checkout` | Switch branches or restore files |
-| `gkm` | `git checkout main \|\| git checkout master` | Switch to main branch (falls back to master if main doesn't exist) |
+| `gkm` | `git checkout main || git checkout master` | Switch to main branch (falls back to master if main doesn't exist) |
 | `gl` | `git lol -20` | Show last 20 commits with custom log format |
 | `gs` | `git status -uno` | Show status without listing untracked files |
 | `gsall` | `git status` | Show full git status including untracked files |
@@ -227,7 +227,7 @@ brew install gnu-getopt
 | `grep` | `ggrep` | Use GNU grep instead of BSD grep |
 | `date` | `gdate` | Use GNU date instead of BSD date |
 | `readlink` | `greadlink` | Use GNU readlink instead of BSD readlink |
-| `getopt` | `/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt` | Use GNU getopt |
+| `getopt` | `/usr/local/Cellar/gnu-getopt/<version>/bin/getopt` | Use GNU getopt (note: version number may vary based on installation) |
 | `vim` | `mvim -v` | Use MacVim in terminal mode |
 
 ### Usage Examples
