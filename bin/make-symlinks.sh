@@ -28,7 +28,7 @@ mkdir -p ~/.vim/after/ftplugin
 # config
 PWD=`pwd`
 HOME=$($READLINK -f ~)
-FILES=(.bashrc .bash_profile .bash_aliases_decorated .bash_aliases_core .gitconfig .inputrc .vimrc .vim .pylintrc `ls .vim/after/ftplugin/*`)
+FILES=(.bashrc .bash_profile .bash_aliases_decorated .bash_aliases_core .zshrc .zsh_aliases_decorated .zsh_aliases_core .gitconfig .inputrc .vimrc .vim .pylintrc `ls .vim/after/ftplugin/*`)
 
 # install files
 for FILE in "${FILES[@]}"

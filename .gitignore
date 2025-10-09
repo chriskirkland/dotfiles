@@ -2,3 +2,5 @@
 .vim/bundle/
 .vim/bundle/*
 .DS_STORE
+.zcompdump
+.zsh_history
