@@ -1,6 +1,10 @@
 # dotfiles
 vim and bash customizations
 
+## Documentation
+
+- **[ALIASES.md](ALIASES.md)** - Comprehensive documentation of all bash aliases, organized by category with usage examples
+
 ## Installation
 ```
 git clone git@github.com:chriskirkland/dotfiles.git
