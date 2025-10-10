@@ -41,7 +41,15 @@ Dim='\e[2m'
 # local config
 uname="cmkirkla"
 hname="mymbp"
-# setup command prompt
+
+# Generates a custom bash prompt with git status, kubernetes context, and exit code indicators.
+# This function is called before each prompt is displayed (via PROMPT_COMMAND).
+# Parameters: None (uses environment variables and git/kubectl commands)
+# Output: Sets PS1 variable with colored prompt showing:
+#   - Exit status of previous command (✔ or ✘)
+#   - Kubernetes context (with helm symbol ⎈)
+#   - Git repository name and branch with color-coded status
+#   - User@host:path when not in a git repository
 function __prompt_command()
 {
   # capture the exit status of the last command
@@ -100,7 +108,15 @@ function __prompt_command()
 PROMPT_COMMAND=__prompt_command
 
 # -------------------------- UTILITY FUNCTIONS ------------------------------ #
-# auto-expand relative paths for `ln`
+
+# Auto-expands relative paths for the `ln` command to absolute paths.
+# This commented-out function parses ln flags and converts relative paths to absolute
+# paths before executing the ln command.
+# Parameters:
+#   -[Ffhinsv]: Standard ln flags
+#   path(s): One or more file paths to be linked
+# Output: Creates symbolic links using absolute paths
+# Example: ln -s ../myfile.txt dest/  (would expand ../myfile.txt to absolute path)
 #function ln()
 #{
 #  # argument parsing strategy taking adapted from
@@ -129,12 +145,23 @@ PROMPT_COMMAND=__prompt_command
 #  eval "ln \"$FLAGS\" \"$PATHS\""
 #}
 
+# Displays the first and last lines of a file (the "bookends").
+# Parameters:
+#   $1: Path to the file to display bookends from
+# Output: Prints first line and last line of the specified file
+# Example: bookends mylog.txt
 function bookends()
 {
   head -n1 $1
   tail -n1 $1
 }
 
+# Monitors ERROR entries in the most recent results log file.
+# Navigates to results/ directory, finds the most recent log file matching
+# the pattern results-[timestamp].log, and tails it while filtering for ERROR lines.
+# Parameters: None
+# Output: Continuously streams ERROR lines from the latest results log file
+# Example: gerr
 function gerr()
 {
   cd results/
@@ -142,6 +169,13 @@ function gerr()
   tail -f -n 2000000 $logfile | grep ERROR
 }
 
+# Searches for pattern matches in the most recent results log file.
+# Finds the most recent results-[timestamp].log file and continuously tails it
+# while filtering for lines matching the provided grep pattern.
+# Parameters:
+#   $1: Grep pattern to search for (supports Perl regex with -P flag)
+# Output: Continuously streams matching lines from the latest results log file
+# Example: glog "(ERROR|FAILED|Action|error|Error|ConnectionPool)"
 function glog()
 {
   # Example usage:
@@ -151,7 +185,13 @@ function glog()
   tail -f -n 2000000 $logfile | grep -P $1
 }
 
-# ensure "old"-style docker daemon is running and connected
+# Ensures "old"-style Docker daemon is running and connected.
+# Checks if docker-machine is stopped and starts it if needed.
+# Also ensures the current shell is connected to the docker daemon by
+# evaluating the docker-machine environment variables.
+# Parameters: None
+# Output: Status messages about docker daemon state
+# Example: dstart
 function dstart()
 {
   # check if docker daemon is running
@@ -175,8 +215,13 @@ if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
 
-# Git TimeWarp (moves git commits forward $1 hours)
-# It would be really great to get this working....
+# Git TimeWarp - moves git commits forward by a specified number of hours.
+# This commented-out function would modify commit timestamps to appear as if they
+# were made N hours in the future. Currently not working as intended.
+# Parameters:
+#   $1: Number of hours to move commits forward (must be integer)
+# Output: Lists commit hashes and hours adjustment (currently incomplete)
+# Example: gtw 24  (would move commits 24 hours forward)
 # function gtw()
 # {
 #   HOURS=$1
@@ -192,7 +237,18 @@ fi
 #   done
 # }
 
-# setup web development workflow for pug/sass
+# Launches web development workflow for Pug and Sass.
+# Sets up file watchers to automatically compile Pug templates to HTML and
+# Sass stylesheets to CSS. Configuration can be customized via .wdlaunch.conf
+# in the current directory.
+# Parameters: None (reads from .wdlaunch.conf if present)
+# Configuration defaults:
+#   PUG_FROM_DIR="pug"    - Source directory for Pug templates
+#   PUG_TO_DIR="."        - Output directory for HTML files
+#   SASS_FROM_DIR="sass"  - Source directory for Sass files
+#   SASS_TO_DIR="css"     - Output directory for CSS files
+# Output: Starts background watchers for Pug and Sass compilation
+# Example: wdlaunch
 function wdlaunch()
 {
   # set defaults
@@ -226,8 +282,15 @@ function wdlaunch()
   wait
 }
 
-# 'git update branch' - update current branch at "highest" relevant branch:
-#   {local upstream} > "upstream" > "origin" > "cmkirkla" > {first defined remote}
+# Git Update Branch - updates current branch from the appropriate remote.
+# Automatically determines the "best" remote to fetch from based on priority:
+# local upstream config > "upstream" > "origin" > "cmkirkla" > first remote
+# Then performs a fast-forward only merge from that remote.
+# Parameters: None
+# Output: 
+#   - Displays the git fetch and merge command being executed
+#   - Error message if not on a branch or not in a git repository
+# Example: gub
 function gub() {
   git_status="`git status -unormal 2>&1`"
   if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
@@ -261,12 +324,24 @@ function gub() {
   git fetch ${upstream} && git merge --ff-only ${upstream}/${branch}
 }
 
-# prints the underlying command for an alias
+# Prints the underlying command for a bash alias.
+# Extracts and displays the actual command that an alias executes, useful for
+# educational purposes and debugging.
+# Parameters:
+#   $@: Name of the alias to print
+# Output: Formatted display of the alias's underlying command
+# Example: print_alias gs  (would show the command behind the 'gs' alias)
 function print_alias() {
   #TODO(cmkirkla): include trailing command line args
   pretty_print "$(alias $@ | cut -d"'" -f2 | cut -d";" -f2- | cut -d'&' -f3-| xargs)"
 }
 
+# Prints a formatted message indicating a command is being run.
+# Displays the provided text in blue with arrow symbols (›››) as a prefix.
+# Parameters:
+#   $@: Command or message to display
+# Output: Formatted message like "››› Running <command>"
+# Example: pretty_print "git status"
 function pretty_print() {
   BLUE="\033[1;34m" # Light Blue
   NC='\033[0m' # No Color
@@ -308,6 +383,18 @@ eval $(thefuck --alias)
 
 ### github helpers
 
+# Internal helper function for cloning GitHub repositories.
+# Clones a GitHub repository into the standardized directory structure:
+# $HOME/git/src/github.com/<org>/<repo>
+# Creates the organization directory if it doesn't exist. If repository already
+# exists, just navigates into it.
+# Parameters:
+#   $1: Repository in format "org/repo" or just "repo" (defaults to "github" org)
+# Output:
+#   - Status messages about directory navigation and cloning
+#   - Changes current directory to the cloned repository
+# Returns: 0 on success
+# Example: gcr_inner github/dotfiles
 function gcr_inner() {
   local ORG_AND_REPO=$1
   local PREVIOUS_DIR=$(pwd)
@@ -350,6 +437,15 @@ function gcr_inner() {
   return 0
 }
 
+# Git Clone Repository - clones a GitHub repository and navigates into it.
+# Wrapper around gcr_inner that handles failures gracefully by returning to the
+# previous directory if the clone fails.
+# Parameters:
+#   $1: Repository in format "org/repo" or just "repo" (defaults to "github" org)
+# Output:
+#   - Status messages from gcr_inner
+#   - Error message if clone fails
+# Example: gcr chriskirkland/dotfiles
 function gcr() {
   # if the new repo checkout fails, put us back into our previous pwd
   if ! gcr_inner $1; then
@@ -358,6 +454,12 @@ function gcr() {
   fi
 }
 
+# Opens the current repository in browser (ORB = Open Repo in Browser).
+# Determines the GitHub organization and repository name from the current git
+# repository and opens the GitHub page in the default browser.
+# Parameters: None (uses current git repository)
+# Output: Opens browser to https://github.com/<org>/<repo>
+# Example: orb
 function orb() {
   # open repo in browser
   local ORG_AND_REPO=$(git rev-parse --show-toplevel | rev | cut -d '/' -f1-2 | rev)
