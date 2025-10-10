@@ -287,7 +287,7 @@ function wdlaunch()
 # local upstream config > "upstream" > "origin" > "cmkirkla" > first remote
 # Then performs a fast-forward only merge from that remote.
 # Parameters: None
-# Output: 
+# Output:
 #   - Displays the git fetch and merge command being executed
 #   - Error message if not on a branch or not in a git repository
 # Example: gub
